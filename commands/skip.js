@@ -1,10 +1,29 @@
-const { SlashCommandBuilder, GuildExplicitContentFilter } = require("discord.js")
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('skip')
         .setDescription('skips a song'),
-    async execute(interaction){
-        await interaction.reply('test veikia skip');
+    execute: async ({client, interaction}) => {
+
+        const queue = client.player.getQueue(interaction.guildId);
+
+        if (!queue){
+            await interaction.reply("No song is playing");
+            return;
+        }
+
+        const currentSong = queue.current;
+
+        queue.skip();
+
+        await interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setDescription(`${currentSong.title} has been skipped!`)
+                    .setThumbnail(currentSong.thumbnail)
+            ]
+        })
     },
 };

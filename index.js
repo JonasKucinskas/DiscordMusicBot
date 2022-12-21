@@ -10,7 +10,7 @@ dotenv.config()
 const TOKEN = process.env.TOKEN
 
 const LOAD_SLASH = process.argv[2] == "load"
-const CLIENT_ID = "1046047806021967932"
+const CLIENT_ID = process.env.CLIENT_ID
 const GUILD_ID = "1046049503494553600"
 
 const client = new Discord.Client({
@@ -21,11 +21,8 @@ const client = new Discord.Client({
     ]
 });
 
-
-
-client.login(TOKEN);
-
 client.commands = new Discord.Collection();
+
 client.player = new Player(client, {
     ytdlOptions:{
         quality: "highestaudio",
@@ -45,7 +42,7 @@ for (const file in commandFiles){
 
     if ("data" in command && "execute" in command){
         client.commands.set(command.data.name, command);
-        if (LOAD_SLASH) commands.push(command.data.toJSON())
+        if (LOAD_SLASH) commands.push(command.data.toJSON());
     }
     else {
         console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
@@ -73,12 +70,18 @@ else {
     client.on("interactionCreate", async interaction =>{
         if(!interaction.isCommand()) return;
     
-        const command = client.commands.get(interaction.name);
-        if(!command) interaction.reply("Nera tiokios komandos");
+        const command = client.commands.get(interaction.commandName);
+        if(!command) return;
     
-        await interaction.deferReply()
-        await command.run({client, interaction})
+        try{
+            await command.execute({client, interaction})
+        }
+        catch(err){
+            console.log(err)
+            await interaction.reply("mano kodas neveikia");
+        }
+        
     }) 
 }
 
-    
+client.login(TOKEN);
