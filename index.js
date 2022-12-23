@@ -8,10 +8,8 @@ const { Player } = require("discord-player")
 
 dotenv.config()
 const TOKEN = process.env.TOKEN
-
-const LOAD_SLASH = process.argv[2] == "load"
 const CLIENT_ID = process.env.CLIENT_ID
-const GUILD_ID = "1046049503494553600"
+
 
 const client = new Discord.Client({
     intents: [
@@ -40,48 +38,41 @@ for (const file in commandFiles){
     const filePath = path.join(commandsPath, commandFiles[file]);
     const command = require(filePath);
 
-    if ("data" in command && "execute" in command){
-        client.commands.set(command.data.name, command);
-        if (LOAD_SLASH) commands.push(command.data.toJSON());
-    }
-    else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-    }
+    client.commands.set(command.data.name, command);
+    commands.push(command.data.toJSON());
 }
 
 client.once("ready", () => {
     console.log("online");
 }); 
 
-if (LOAD_SLASH){
+client.on("guildCreate", guild => {//when new server is joined, load slash commands to it.
     const rest = new REST({version: "9"}).setToken(TOKEN)
-    rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {body: commands})
+    rest.put(Routes.applicationGuildCommands(CLIENT_ID, guild.id), {body: commands})
     .then(() => {
-        console.log("Slash commands loaded")
-        process.exit(0);
+        console.log("Slash commands loaded for: " + guild.name)
     })
     .catch((err) =>{
         console.log(err)
-        process.exit(1)
+        process.exit(1);
     })
-}
-else {
-    
-    client.on("interactionCreate", async interaction =>{
-        if(!interaction.isCommand()) return;
-    
-        const command = client.commands.get(interaction.commandName);
-        if(!command) return;
-    
-        try{
-            await command.execute({client, interaction})
-        }
-        catch(err){
-            console.log(err)
-            await interaction.reply("mano kodas neveikia");
-        }
-        
-    }) 
-}
+})
 
+client.on("interactionCreate", async interaction =>{//if slash command it used.
+    if(!interaction.isCommand()) return;
+
+    const command = client.commands.get(interaction.commandName);
+    if(!command) return;
+
+    try{
+        await command.execute({client, interaction})
+    }
+    catch(err){
+        console.log(err)
+        await interaction.reply("mano kodas neveikia, idk");
+    }
+    
+}) 
+
+module.exports = { client, commands };
 client.login(TOKEN);
