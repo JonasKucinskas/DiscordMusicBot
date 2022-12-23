@@ -1,6 +1,6 @@
 const { QueryType } = require("discord-player");
 const { EmbedBuilder } = require("discord.js");
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder, time } = require("@discordjs/builders");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -34,13 +34,15 @@ module.exports = {
 
         var song = result.tracks[0];
         await queue.addTrack(song);
-            
+
+
         if (!queue.connection){
             await queue.connect(interaction.member.voice.channel)
         }
 
         if (!queue.playing){
             await queue.play();
+
         }
 
         await interaction.reply({
