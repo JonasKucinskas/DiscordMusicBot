@@ -71,7 +71,6 @@ client.on("interactionCreate", async interaction =>{//if slash command it used.
         console.log(err)
         await interaction.reply("mano kodas neveikia, idk");
     }
-    
 }) 
 
 module.exports = { client, commands };
