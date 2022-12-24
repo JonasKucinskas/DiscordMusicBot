@@ -53,9 +53,7 @@ module.exports = {
             new EmbedBuilder()
                 .setTitle(`Number of songs in the queue: ${queue.tracks.length}\n` )
                 .setDescription(item)
-                .setThumbnail(queue.current)
                 .setFooter({text:`Total queue song duration: ${timeUntilPlayback}`}),
-
             ]
         })
     },

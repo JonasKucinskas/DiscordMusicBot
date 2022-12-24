@@ -10,7 +10,7 @@ module.exports = {
         const queue = client.player.getQueue(interaction.guildId);
         
         if (!queue){
-            await interaction.reply("No song is playing");
+            await interaction.reply("No song is playing.");
             return;
         }
         

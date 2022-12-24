@@ -20,7 +20,6 @@ const client = new Discord.Client({
 });
 
 client.commands = new Discord.Collection();
-
 client.player = new Player(client, {
     ytdlOptions:{
         quality: "highestaudio",
