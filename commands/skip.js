@@ -4,13 +4,13 @@ const { EmbedBuilder } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('skip')
-        .setDescription('skips a song'),
+        .setDescription('Skips a song.'),
     execute: async ({client, interaction}) => {
 
         const queue = client.player.getQueue(interaction.guildId);
 
         if (!queue){
-            await interaction.reply("No song is playing");
+            await interaction.reply("No song is playing.");
             return;
         }
 

@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('stop')
-        .setDescription('stops a song and clears the queue.'),
+        .setDescription('Stops a song and clears the queue.'),
     execute: async({client, interaction}) => {
         
         

@@ -1,11 +1,11 @@
 const { QueryType } = require("discord-player");
 const { EmbedBuilder } = require("discord.js");
-const { SlashCommandBuilder, time } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('play')
-        .setDescription('plays a song')
+        .setDescription('Adds song to the queue.')
         .addStringOption(option =>
             option.setName("searchterms").setDescription("search keywords").setRequired(true)
         ),
@@ -28,7 +28,7 @@ module.exports = {
         })
         
         if (result.tracks.length === 0){
-            await interaction.reply("no results");
+            await interaction.reply("no results?");
             return
         }
 
@@ -42,7 +42,6 @@ module.exports = {
 
         if (!queue.playing){
             await queue.play();
-
         }
 
         await interaction.reply({
