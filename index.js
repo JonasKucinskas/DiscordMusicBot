@@ -43,6 +43,7 @@ for (const file in commandFiles){
 
 client.once("ready", () => {
     console.log("online");
+
 }); 
 
 client.on("guildCreate", guild => {//when new server is joined, load slash commands to it.
@@ -71,6 +72,8 @@ client.on("interactionCreate", async interaction =>{//if slash command it used.
         await interaction.reply("mano kodas neveikia, idk");
     }
 }) 
-
 module.exports = { client, commands };
+const { updateSlashCommands } = require('./updateSlashCommands.js');
+updateSlashCommands()
 client.login(TOKEN);
+
