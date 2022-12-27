@@ -19,6 +19,8 @@ const client = new Discord.Client({
     ]
 });
 
+
+
 client.commands = new Discord.Collection();
 client.player = new Player(client, {
     ytdlOptions:{
@@ -57,6 +59,7 @@ client.on("guildCreate", guild => {//when new server is joined, load slash comma
         process.exit(1);
     })
 })
+var guildIds = client.guilds.cache.map(guild => guild.id)
 
 client.on("interactionCreate", async interaction =>{//if slash command it used.
     if(!interaction.isCommand()) return;
@@ -72,8 +75,10 @@ client.on("interactionCreate", async interaction =>{//if slash command it used.
         await interaction.reply("mano kodas neveikia, idk");
     }
 }) 
-module.exports = { client, commands };
+client.login(TOKEN);
+
+module.exports = { guildIds, commands };
 const { updateSlashCommands } = require('./updateSlashCommands.js');
 updateSlashCommands()
-client.login(TOKEN);
+
 
