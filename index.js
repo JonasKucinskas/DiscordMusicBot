@@ -18,7 +18,7 @@ const client = new Discord.Client({
         Discord.IntentsBitField.Flags.GuildVoiceStates
     ]
 });
-
+client.login(TOKEN);
 client.commands = new Discord.Collection();
 client.player = new Player(client, {
     ytdlOptions:{
@@ -72,5 +72,9 @@ client.on("interactionCreate", async interaction =>{//if slash command it used.
     }
 }) 
 
+
+
+
+
 module.exports = { client, commands };
-client.login(TOKEN);
+
