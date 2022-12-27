@@ -9,7 +9,7 @@ const { Player } = require("discord-player")
 dotenv.config()
 const TOKEN = process.env.TOKEN
 const CLIENT_ID = process.env.CLIENT_ID
-
+const LOAD_SLASH = process.argv[2] == "loadCommands"
 
 const client = new Discord.Client({
     intents: [
@@ -28,7 +28,7 @@ client.player = new Player(client, {
         highWaterMark: 1 << 58
     }
 })
-
+client.login(TOKEN);
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
 
@@ -43,7 +43,15 @@ for (const file in commandFiles){
     commands.push(command.data.toJSON());
 }
 
+
 client.once("ready", () => {
+
+    if (LOAD_SLASH){
+
+        const { updateSlashCommands } = require('./updateSlashCommands.js');
+        updateSlashCommands(client, commands);
+    }
+
     console.log("online");
 
 }); 
@@ -59,7 +67,6 @@ client.on("guildCreate", guild => {//when new server is joined, load slash comma
         process.exit(1);
     })
 })
-var guildIds = client.guilds.cache.map(guild => guild.id)
 
 client.on("interactionCreate", async interaction =>{//if slash command it used.
     if(!interaction.isCommand()) return;
@@ -75,10 +82,8 @@ client.on("interactionCreate", async interaction =>{//if slash command it used.
         await interaction.reply("mano kodas neveikia, idk");
     }
 }) 
-client.login(TOKEN);
 
-module.exports = { guildIds, commands };
-const { updateSlashCommands } = require('./updateSlashCommands.js');
-updateSlashCommands()
+
+
 
 
