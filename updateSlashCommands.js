@@ -1,17 +1,32 @@
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
-const { client, commands } = require('./index.js');
+const dotenv = require("dotenv");
 
-for (const guild in client.guilds){
+dotenv.config()
+const TOKEN = process.env.TOKEN
+const CLIENT_ID = process.env.CLIENT_ID
+
+function updateSlashCommands(client, commands){
+
+    const guildIds = client.guilds.cache.map(guild => guild.id);
+    const guildNames = client.guilds.cache.map(guild => guild.name);
 
     const rest = new REST({version: "9"}).setToken(TOKEN)
-    rest.put(Routes.applicationGuildCommands(CLIENT_ID, guild.id), {body: commands})
-    .then(() => {
-        console.log("Slash commands loaded for: " + guild.name)
-    })
-    .catch((err) =>{
-        console.log(err)
-        process.exit(1);
-    })
+    for (const guildNum in guildIds){
 
+        let guildId = guildIds[guildNum];
+
+        rest.put(Routes.applicationGuildCommands(CLIENT_ID, guildId), {body: commands})
+        .then(() => {
+            console.log("Slash commands loaded for: " + guildNames[guildNum] + " " + client.guilds.cache.get(guildId))
+        })
+        .catch((err) =>{
+            console.log(err)
+        })
+    
+    }
+
+    return
 }
+
+module.exports = { updateSlashCommands }
