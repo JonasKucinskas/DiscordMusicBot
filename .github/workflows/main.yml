@@ -1,10 +1,8 @@
 name: CI-SFTP
- 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
- 
 jobs:
   deploy-via-sftp:
     runs-on: ubuntu-latest
@@ -18,7 +16,6 @@ jobs:
           server: sftp://34.88.197.175
           port: 22 # default is 22
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
- 
           
           local_path: ./* # default is ./*
           remote_path: /home/bot
