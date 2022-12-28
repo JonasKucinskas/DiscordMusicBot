@@ -1,0 +1,23 @@
+name: CI-SFTP
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  deploy-via-sftp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+          
+      - name: SFTP Deploy
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.1
+        with:
+          username: rsa-key-20221227
+          server: sftp://34.88.197.175
+          port: 22 # default is 22
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+          local_path: ./* # default is ./*
+          remote_path: /home/bot
+          
+          args: '-o ConnectTimeout=5'
