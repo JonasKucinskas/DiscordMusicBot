@@ -25,7 +25,7 @@ function updateSlashCommands(client, commands){
         })
     
     }
-
+    console.log('Done');
     return
 }
 

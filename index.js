@@ -82,8 +82,3 @@ client.on("interactionCreate", async interaction =>{//if slash command it used.
         await interaction.reply("mano kodas neveikia, idk");
     }
 }) 
-
-
-
-
-
