@@ -1,4 +1,4 @@
-const getLyrics = require('../lib/getLyrics.js')
+const Genius = require("genius-lyrics");
 const dotenv = require("dotenv")
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require("discord.js");
@@ -19,16 +19,12 @@ module.exports = {
             return;
         }
 
-        const currentSong = queue.current;
+        const song = queue.current;
+        const geniusClient = new Genius.Client(GENIUS_TOKEN);
+        const searches = await geniusClient.songs.search(song.title);
 
-        const options={
-            apiKey: GENIUS_TOKEN,
-            title: currentSong.title,
-            artist: currentSong.author,
-            optimizeQuery:true
-        }
-
-        const songLyrics = await getLyrics(options)
+        // Pick first one
+        const songLyrics = await searches[0].lyrics();
 
         if (!songLyrics){
             await interaction.reply('Lyrics not found.')
@@ -38,9 +34,9 @@ module.exports = {
         await interaction.reply({
             embeds: [
                 new EmbedBuilder()
-                    .setTitle(`Lyrics for **[${currentSong.title}](${currentSong.url})**:`)
+                    .setTitle(`Lyrics for **[${song.title}](${song.url})**:`)
                     .setDescription(songLyrics)
-                    .setThumbnail(currentSong.thumbnail)
+                    .setThumbnail(song.thumbnail)
             ]
         })
     }
