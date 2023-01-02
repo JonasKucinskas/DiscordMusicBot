@@ -1,17 +1,17 @@
-const Genius = require("genius-lyrics");
 const dotenv = require("dotenv")
+const Genius = require("genius-lyrics");
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require("discord.js");
 
 dotenv.config()
-GENIUS_TOKEN = process.env.GENIUS_TOKEN;
+const GENIUS_TOKEN = process.env.GENIUS_TOKEN;
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('lyrics')
         .setDescription('Displays lyrics for the song.'),
     execute: async ({client, interaction}) => {
-
+        
         const queue = client.player.getQueue(interaction.guildId);
 
         if (!queue){
@@ -19,14 +19,13 @@ module.exports = {
             return;
         }
 
-        const song = queue.current;
         const geniusClient = new Genius.Client(GENIUS_TOKEN);
+            
+        const song = queue.current;
         const searches = await geniusClient.songs.search(song.title);
-
-        // Pick first one
-        const songLyrics = await searches[0].lyrics();
-
-        if (!songLyrics){
+        const lyrics = await searches[0].lyrics();
+   
+        if (!lyrics){
             await interaction.reply('Lyrics not found.')
             return
         }
@@ -35,7 +34,7 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                     .setTitle(`Lyrics for **[${song.title}](${song.url})**:`)
-                    .setDescription(songLyrics)
+                    .setDescription(lyrics)
                     .setThumbnail(song.thumbnail)
             ]
         })
