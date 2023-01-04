@@ -16,10 +16,6 @@
     "@discordjs/voice": "^0.14.0",
     "discord-player": "^5.3.2",
     "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3",
-    "genius-lyrics": "^4.4.2",
-    "lyrics-finder": "^21.7.0",
-    "musicmatch": "^0.3.2",
-    "musixmatch": "^0.1.6"
+    "dotenv": "^16.0.3"
   }
 }
