@@ -1,7 +1,8 @@
 const dotenv = require("dotenv")
-const Genius = require("genius-lyrics");
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require("discord.js");
+
+//not working on server due to Genius api 403 error
 
 dotenv.config()
 const GENIUS_TOKEN = process.env.GENIUS_TOKEN;

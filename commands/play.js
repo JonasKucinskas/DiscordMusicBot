@@ -47,7 +47,7 @@ module.exports = {
         await interaction.reply({
             embeds: [
                 new EmbedBuilder()
-                    .setDescription(`**[${song.title}](${song.url})** has been added to the Queue (${queue.tracks.length + 1})`)
+                    .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
                     .setThumbnail(song.thumbnail)
                     .setFooter({ text: `Duration: ${song.duration}`})
             ]

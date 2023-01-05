@@ -10,6 +10,12 @@ module.exports = {
 
         const queue = client.player.getQueue(interaction.guildId);
 
+        if(!interaction.member.voice.channel){
+
+            await interaction.reply("reikia buti voice channelyje ;)");
+            return;
+        }
+
         if (!queue){
             await interaction.reply("No song is playing");
             return;

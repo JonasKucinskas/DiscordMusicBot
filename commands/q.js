@@ -36,14 +36,17 @@ module.exports = {
             return;
         }
 
-        let timeUntilPlayback = queue.current.duration.replace(':', '.');// - queue.current.beenPlaying
-        let item = '';
-        
+        const currentSong = queue.current;
 
-        for (let i = 0; i < queue.tracks.length; i++){
-            const song = queue.tracks[i];
+        let timeUntilPlayback = currentSong.duration.replace(':', '.');// - queue.current.beenPlaying
+
+        let item = `1. **[${currentSong.title}](${currentSong.url})**  starts in: Currently playing.\n`;//add current song to queue list.
+
+        for (let i = 1; i < queue.tracks.length + 1; i++){
+            const song = queue.tracks[i-1];
             const songDuration = song.duration.replace(':', '.')//need to replace : with ., so I can add strigs as ints later.
-            item += `**[${song.title}](${song.url})**  starts in: ${timeUntilPlayback}\n`,
+            item += `${i+1}. **[${song.title}](${song.url})**  starts in: ${timeUntilPlayback}\n`,
+            
             timeUntilPlayback = addTime(timeUntilPlayback, songDuration);
         }
 
@@ -53,7 +56,7 @@ module.exports = {
             new EmbedBuilder()
                 .setTitle(`Number of songs in the queue: ${queue.tracks.length}\n` )
                 .setDescription(item)
-                .setFooter({text:`Total queue song duration: ${timeUntilPlayback}`}),
+                .setFooter({text:`Total queue duration: ${timeUntilPlayback}`}),
             ]
         })
     },

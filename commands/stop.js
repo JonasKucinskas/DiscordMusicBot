@@ -6,7 +6,12 @@ module.exports = {
         .setDescription('Stops a song and clears the queue.'),
     execute: async({client, interaction}) => {
         
-        
+        if(!interaction.member.voice.channel){
+
+            await interaction.reply("reikia buti voice channelyje ;)");
+            return;
+        }
+
         const queue = client.player.getQueue(interaction.guildId);
         
         if (!queue){
