@@ -54,7 +54,7 @@ module.exports = {
             
             embeds: [
             new EmbedBuilder()
-                .setTitle(`Number of songs in the queue: ${queue.tracks.length}\n` )
+                .setTitle(`Number of songs in the queue: ${queue.tracks.length + 1}\n` )
                 .setDescription(item)
                 .setFooter({text:`Total queue duration: ${timeUntilPlayback}`}),
             ]
