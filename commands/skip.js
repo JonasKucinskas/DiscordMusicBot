@@ -20,9 +20,9 @@ module.exports = {
             return;
         }
 
-        const currentSong = queue.current;
-
         queue.skip();
+
+        const currentSong = queue.current;
 
         await interaction.reply({
             embeds: [

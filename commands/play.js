@@ -17,11 +17,15 @@ module.exports = {
             return;
         }
         
-        const queue = await client.player.createQueue(interaction.guild);
+        let queue = client.player.getQueue(interaction.guildId);
 
-        let searchterms = interaction.options.getString("searchterms");
+        if (!queue){//if queue does'nt exits, create new queue.
+            queue = await client.player.createQueue(interaction.guild);
+        }
 
-        const result = await client.player.search(searchterms, {
+        let searchterms = interaction.options.getString("searchterms");//user typed parameter for slash command.
+
+        const result = await client.player.search(searchterms, {//search for tracks based on user input.
 
             requestedBy: interaction.user,
             searchEngine: QueryType.AUTO
@@ -34,7 +38,6 @@ module.exports = {
 
         var song = result.tracks[0];
         await queue.addTrack(song);
-
 
         if (!queue.connection){
             await queue.connect(interaction.member.voice.channel)

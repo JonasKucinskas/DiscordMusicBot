@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('pauses and unpauses a song.'),
     execute: async ({client, interaction}) => {
 
-        const queue = client.player.getQueue(interaction.guildId);
+        const queue = client.player.getQueue(interaction.guildId);//get current queue.
 
         if(!interaction.member.voice.channel){
 
@@ -21,7 +21,7 @@ module.exports = {
             return;
         }
 
-        if (queue.setPaused()){
+        if (queue.setPaused()){//if paused, unpause, if unpaused, pause.
             queue.setPaused(false);
         }
         else queue.setPaused(true);

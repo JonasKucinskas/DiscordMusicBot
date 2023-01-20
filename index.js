@@ -28,6 +28,7 @@ client.player = new Player(client, {
         highWaterMark: 1 << 58
     }
 })
+
 client.login(TOKEN);
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
@@ -48,7 +49,7 @@ client.once("ready", () => {
 
     if (LOAD_SLASH){
 
-        const { updateSlashCommands } = require('./updateSlashCommands.js');
+        const { updateSlashCommands } = require('./util/updateSlashCommands.js');
         updateSlashCommands(client, commands);
     }
 
@@ -56,7 +57,7 @@ client.once("ready", () => {
 
 }); 
 
-client.on("guildCreate", guild => {//when new server is joined, load slash commands to it.
+client.on("guildCreate", guild => {//when bot joins new server, load slash commands into it.
     const rest = new REST({version: "9"}).setToken(TOKEN)
     rest.put(Routes.applicationGuildCommands(CLIENT_ID, guild.id), {body: commands})
     .then(() => {

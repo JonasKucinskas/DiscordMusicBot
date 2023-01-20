@@ -6,11 +6,14 @@ module.exports = {
         .setDescription('Replays current song.'),
     execute: async ({client, interaction}) => {
 
+        // this command starts playing current song from the beginning.
+
         if(!interaction.member.voice.channel){
 
             await interaction.reply("reikia buti voice channelyje ;)");
             return;
         }
+
 
         const queue = await client.player.getQueue(interaction.guildId);
 
@@ -21,8 +24,8 @@ module.exports = {
         
         await queue.seek(0);
         
-        const song = queue.current;
+        const currentSong = queue.current;
 
-        await interaction.reply(`${song.title} replayed.`)
+        await interaction.reply(`${currentSong.title} replayed.`)
     }
 }
