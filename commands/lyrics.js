@@ -1,11 +1,6 @@
-const dotenv = require("dotenv")
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require("discord.js");
-
-//not working on server due to Genius api 403 error
-
-dotenv.config()
-const GENIUS_TOKEN = process.env.GENIUS_TOKEN;
+const { getLyrics } = require("lyrics-dumper");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,30 +9,34 @@ module.exports = {
     execute: async ({client, interaction}) => {
         
         const queue = client.player.getQueue(interaction.guildId);
-
-        if (!queue){
+        const song = queue.current;
+        
+        if (!song){
             await interaction.reply("No song is playing.");
             return;
         }
 
-        const geniusClient = new Genius.Client(GENIUS_TOKEN);
-            
-        const song = queue.current;
-        const searches = await geniusClient.songs.search(song.title);
-        const lyrics = await searches[0].lyrics();
-   
-        if (!lyrics){
-            await interaction.reply('Lyrics not found.')
-            return
+        let result;
+        try{
+            result = await getLyrics(song.title);
+        }
+        catch(err){
+            await interaction.reply("Kartais neveikia ir as nzn kodel, cia yra vienas tu atveju.");
+        }
+
+        if (!result){
+            await interaction.reply("Lyrics not found.");
+            return;
         }
 
         await interaction.reply({
             embeds: [
                 new EmbedBuilder()
                     .setTitle(`Lyrics for **[${song.title}](${song.url})**:`)
-                    .setDescription(lyrics)
+                    .setDescription(result.lyrics)
                     .setThumbnail(song.thumbnail)
             ]
         })
+        
     }
 }
