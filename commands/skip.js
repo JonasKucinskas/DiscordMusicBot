@@ -14,20 +14,20 @@ module.exports = {
         }
 
         const queue = client.player.getQueue(interaction.guildId);
+        const currentSong = queue.current;
         
-        if (!queue){
+        if (!currentSong){
             await interaction.reply("No song is playing.");
             return;
         }
 
         queue.skip();
 
-        const currentSong = queue.current;
 
         await interaction.reply({
             embeds: [
                 new EmbedBuilder()
-                    .setDescription(`${currentSong.title} has been skipped!`)
+                    .setDescription(`**[${currentSong.title}](${currentSong.url})** has been skipped!`)
                     .setThumbnail(currentSong.thumbnail)
             ]
         })

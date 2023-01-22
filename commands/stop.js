@@ -22,11 +22,6 @@ module.exports = {
         queue.clear();
         queue.skip();
         
-        await interaction.reply({
-            embeds: [
-                new EmbedBuilder()
-                    .setDescription(`Queue has been cleared.`)
-            ]
-        })
+        await interaction.reply("Queue has been cleared.")
     },
 };

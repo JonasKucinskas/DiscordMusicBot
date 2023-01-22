@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, FormattingPatterns } = require("discord.js");
 const { getLyrics } = require("lyrics-dumper");
 
 module.exports = {
@@ -16,27 +16,25 @@ module.exports = {
             return;
         }
 
-        let result;
-        try{
-            result = await getLyrics(song.title);
-        }
-        catch(err){
-            await interaction.reply("Kartais neveikia ir as nzn kodel, cia yra vienas tu atveju.");
-        }
+        const result = await getLyrics(song.title);//if lyrics are not found, getLyrics() throws exeption instead of returning undefined for some reason.
 
         if (!result){
-            await interaction.reply("Lyrics not found.");
+            await interaction.reply("Lyrics not found.");  
             return;
+        }
+
+        let title = `Lyrics for **[${song.title}](${song.url})**:\n\n`;
+
+        if (result.lyrics.length + title.length >= 4096){//Lyrics cant be longer than 4096 characters.
+            result.lyrics = result.lyrics.substring(0, 4096 - title.length);
         }
 
         await interaction.reply({
             embeds: [
                 new EmbedBuilder()
-                    .setTitle(`Lyrics for **[${song.title}](${song.url})**:`)
-                    .setDescription(result.lyrics)
+                    .setDescription(title + result.lyrics)
                     .setThumbnail(song.thumbnail)
             ]
         })
-        
     }
 }

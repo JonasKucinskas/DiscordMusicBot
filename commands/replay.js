@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,16 +17,22 @@ module.exports = {
 
 
         const queue = await client.player.getQueue(interaction.guildId);
+        const currentSong = queue.current;
 
-        if (!queue){
+        if (!currentSong){
             await interaction.reply('No song is playing');
             return;
         }
         
         await queue.seek(0);
         
-        const currentSong = queue.current;
-
-        await interaction.reply(`${currentSong.title} replayed.`)
+        await interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setDescription(`**[${currentSong.title}](${currentSong.url})** has been added replayed.`)
+                    .setThumbnail(currentSong.thumbnail)
+                    .setFooter({text: `Duration: ${currentSong.duration}`})
+            ]
+        })
     }
 }
