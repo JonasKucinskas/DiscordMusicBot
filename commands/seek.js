@@ -47,7 +47,7 @@ module.exports = {
                 new EmbedBuilder()
                     .setDescription(`**[${currentSong.title}](${currentSong.url})** seeked at ${time / 1000} seconds.`)
                     .setThumbnail(currentSong.thumbnail)
-                    .setFooter({ text: `Duration: ${song.duration}`})
+                    .setFooter({ text: `Duration: ${currentSong.duration}`})
             ]
         })
     }
