@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { EmbedBuilder, FormattingPatterns } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { getLyrics } = require("lyrics-dumper");
 
 module.exports = {
@@ -9,23 +9,23 @@ module.exports = {
     execute: async ({client, interaction}) => {
         
         const queue = client.player.getQueue(interaction.guildId);
-        const song = queue.current;
+        const currentSong = queue.current;
         
         if (!song){
             await interaction.reply("No song is playing.");
             return;
         }
 
-        const result = await getLyrics(song.title);//if lyrics are not found, getLyrics() throws exeption instead of returning undefined for some reason.
+        let result = await getLyrics(currentSong.title);
 
         if (!result){
             await interaction.reply("Lyrics not found.");  
             return;
         }
 
-        let title = `Lyrics for **[${song.title}](${song.url})**:\n\n`;
+        let title = `Lyrics for **[${currentSong.title}](${currentSong.url})**:\n\n`;
 
-        if (result.lyrics.length + title.length >= 4096){//Lyrics cant be longer than 4096 characters.
+        if (result.lyrics.length + title.length >= 4096){//interaction.reply cant be longer than 4096 characters.
             result.lyrics = result.lyrics.substring(0, 4096 - title.length);
         }
 
@@ -33,7 +33,7 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                     .setDescription(title + result.lyrics)
-                    .setThumbnail(song.thumbnail)
+                    .setThumbnail(currentSong.thumbnail)
             ]
         })
     }
