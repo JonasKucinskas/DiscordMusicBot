@@ -11,7 +11,7 @@ module.exports = {
         const queue = client.player.getQueue(interaction.guildId);
         const currentSong = queue.current;
         
-        if (!song){
+        if (!currentSong){
             await interaction.reply("No song is playing.");
             return;
         }
@@ -24,9 +24,10 @@ module.exports = {
         }
 
         let title = `Lyrics for **[${currentSong.title}](${currentSong.url})**:\n\n`;
-
-        if (result.lyrics.length + title.length >= 4096){//interaction.reply cant be longer than 4096 characters.
-            result.lyrics = result.lyrics.substring(0, 4096 - title.length);
+        let footer = "\n\nNot all lyrics could fit into this message."
+        
+        if (result.lyrics.length + title.length + footer.length > 4096){//interaction.reply cant be longer than 4096 characters.
+            result.lyrics = result.lyrics.substring(0, 4096 - title.length - footer.length) + footer;
         }
 
         await interaction.reply({
